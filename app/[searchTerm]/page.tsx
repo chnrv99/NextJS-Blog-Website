@@ -1,5 +1,5 @@
-import React from 'react'
-import getWikiResults from '@/lib/getWikiResults'
+import getWikiResults from "@/lib/getWikiResults"
+import Item from "./components/item"
 
 type Props = {
     params: {
@@ -24,20 +24,21 @@ export async function generateMetadata({ params: { searchTerm } }: Props) {
     }
 }
 
-export default async function SearchResults({ params: {searchTerm}}: Props) {
+export default async function SearchResults({ params: { searchTerm } }: Props) {
     const wikiData: Promise<SearchResult> = getWikiResults(searchTerm)
     const data = await wikiData
     const results: Result[] | undefined = data?.query?.pages
 
     const content = (
-        <main className='bg-slate-200 mx-auto max-w-lg py-1 min-h-screen'>
-           {results
+        <main className="bg-slate-200 mx-auto max-w-lg py-1 min-h-screen">
+            {results
                 ? Object.values(results).map(result => {
-                   return <p>{JSON.stringify(result)}</p>
+                    return <Item key={result.pageid} result={result} />
                 })
                 : <h2 className="p-2 text-xl">{`${searchTerm} Not Found`}</h2>
             }
         </main>
     )
-  return content
+
+    return content
 }
